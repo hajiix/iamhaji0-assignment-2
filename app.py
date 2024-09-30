@@ -105,8 +105,6 @@ def index():
     plt.savefig(plot_path)  # Use tight layout and high DPI
     plt.close()  # Close the figure to free memory
 
-    converged = False
-    
     convergence_path = os.path.join('static', 'temp.png')
     
     return render_template('index.html', plot_url=plot_path, convergence_url=convergence_path)

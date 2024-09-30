@@ -112,13 +112,12 @@ class KMeans():
         else:
             centers = self.initialize_kmeans()
         self.make_clusters(centers)
-        new_centers = centers
+        new_centers = self.compute_centers()
         self.snap(new_centers)
         while self.are_diff(centers, new_centers):
             self.unassign()
             centers = new_centers
             self.make_clusters(centers)
             new_centers = self.compute_centers()
-            number +=1
             self.snap(new_centers)
         return
