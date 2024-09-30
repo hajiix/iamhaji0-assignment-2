@@ -6,7 +6,7 @@ import random
 import matplotlib
 import matplotlib.pyplot as plt
 from kmeans import KMeans
-from plotting import create_scatter_plot
+
 
 
 import os
@@ -25,9 +25,7 @@ def run_convergence(data, initialize_method="random", k=4):
         k = 1
     kmeans = KMeans(data, k)
     kmeans.lloyds(initialize_method)
-    kmeans.initialize_farthest_first()
     images = kmeans.snaps
-    print(images)
     for i, img in enumerate(images):
         img.save(f'static/kmeans_step_{i}.png', optimize=False)
     images[0].save(

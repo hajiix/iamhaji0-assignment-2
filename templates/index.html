@@ -49,7 +49,6 @@
     </div>
 
     <script>
-      console.log("run");
       let currentStep = 0;
       let convergence = document.querySelector(".convergence");
       let reset = document.querySelector(".reset");
@@ -60,14 +59,12 @@
 
       if (convergence) {
         convergence.addEventListener("click", () => {
-          console.log(image.src);
           // Toggle plot image source
           image.src =
             "{{ url_for('static', filename='temp.png') }}?v=" +
             new Date().getTime();
-          console.log(image.src);
           currentStepInput = maxStepsInput;
-          currentStep = maxStepsInput;         
+          currentStep = maxStepsInput;
         });
       }
       if (reset) {
@@ -81,10 +78,7 @@
 
       if (stepThrough) {
         stepThrough.addEventListener("click", () => {
-          console.log("stepping through");
           let maxSteps = maxStepsInput - 1; // Pass the total number of steps from Python
-          console.log("max steps: " + maxSteps);
-          console.log(currentStep);
 
           if (currentStep <= maxSteps) {
             currentStepInput = currentStep;
