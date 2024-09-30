@@ -16,7 +16,7 @@ class KMeans():
     
     def snap(self, centers):
         TEMPFILE = "temp.png"
-        plot_path = os.path.join('static', TEMPFILE, )
+        plot_path = os.path.join('static', TEMPFILE)
 
         # Use the centralized plotting function
         data_x = self.data[:, 0]

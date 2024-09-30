@@ -35,21 +35,29 @@
       </div>
     </form>
     <div class="buttons">
-      <button class="button">Step through KMeans</button>
+      <button class="step button">Step through KMeans</button>
       <button class="convergence button">Run to Convergence</button>
       <button class="generate button">Generate New Dataset</button>
       <button class="reset button">Reset Algorithm</button>
     </div>
+
+    <input type="hidden" id="max-steps" value="{{ max_steps }}" />
+    <input type="hidden" id="current-step" value="0" />
 
     <div class="plot">
       <img id="plot-image" src="{{ plot_url }}" alt="Plot Image" />
     </div>
 
     <script>
-      console.log("run")
+      console.log("run");
+      let currentStep = 0;
       let convergence = document.querySelector(".convergence");
       let reset = document.querySelector(".reset");
       let image = document.querySelector("#plot-image");
+      let stepThrough = document.querySelector(".step");
+      let currentStepInput = 0;
+      let maxStepsInput = parseInt(document.querySelector("#max-steps").value);
+
       if (convergence) {
         convergence.addEventListener("click", () => {
           console.log(image.src);
@@ -58,12 +66,35 @@
             "{{ url_for('static', filename='temp.png') }}?v=" +
             new Date().getTime();
           console.log(image.src);
+          currentStepInput = maxStepsInput;
+          currentStep = maxStepsInput;         
         });
       }
       if (reset) {
         reset.addEventListener("click", () => {
           image.src = "{{ url_for('static', filename='plot.png') }}";
           +new Date().getTime();
+          currentStepInput = 0;
+          currentStep = 0;
+        });
+      }
+
+      if (stepThrough) {
+        stepThrough.addEventListener("click", () => {
+          console.log("stepping through");
+          let maxSteps = maxStepsInput - 1; // Pass the total number of steps from Python
+          console.log("max steps: " + maxSteps);
+          console.log(currentStep);
+
+          if (currentStep <= maxSteps) {
+            currentStepInput = currentStep;
+            image.src =
+              "{{ url_for('static', filename='kmeans_step_') }}" +
+              currentStep +
+              ".png?v=" +
+              new Date().getTime();
+            currentStep = currentStep + 1;
+          }
         });
       }
     </script>

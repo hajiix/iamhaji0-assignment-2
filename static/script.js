@@ -3,6 +3,7 @@ let plotImage = document.querySelector("#plot-image");
 let form = document.querySelector("#uploadForm")
 
 generate.addEventListener("click", (event) => {
+  form.submit()
   fetch("/generate-dataset", {
     method: "POST",
     headers: {

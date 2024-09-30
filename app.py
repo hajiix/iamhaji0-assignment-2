@@ -14,8 +14,10 @@ import os
 app = Flask(__name__)
 matplotlib.use('Agg')
 
+
 def get_random():
     return random.uniform(-10, 10)
+
 
 @app.route("/run-convergence", methods=["POST"])
 def run_convergence(data, initialize_method="random", k=4):
@@ -25,6 +27,9 @@ def run_convergence(data, initialize_method="random", k=4):
     kmeans.lloyds(initialize_method)
     kmeans.initialize_farthest_first()
     images = kmeans.snaps
+    print(images)
+    for i, img in enumerate(images):
+        img.save(f'static/kmeans_step_{i}.png', optimize=False)
     images[0].save(
         'kmeans.gif',
         optimize=False,
@@ -35,7 +40,7 @@ def run_convergence(data, initialize_method="random", k=4):
     )
     convergence_path = os.path.join('static', 'temp0.png')
 
-    return {"convergence_url": convergence_path}
+    return len(images)
 
         
 @app.route("/generate-dataset", methods=["POST"])
@@ -54,14 +59,14 @@ def index():
     data_x = [x for x, _ in dataset]
     data_y = [y for _, y in dataset]
 
+    length_images = 0
     if request.method == 'POST':
         k_clusters = request.form.get("k_clusters")
-        print(k_clusters)
         initialization_method = request.form.get("initialization_method")
-        print(initialization_method)
         if k_clusters:
-            run_convergence(np.array(dataset), initialization_method, int(k_clusters))
-        print(initialization_method)
+           length_images = run_convergence(np.array(dataset), initialization_method, int(k_clusters))
+    if length_images == 0:    
+        length_images = run_convergence(np.array(dataset))
 
     plt.figure(figsize=(8, 6))  # Set the figure size
     plt.title("K-Means Clustering Data", fontsize=16, pad=20)
@@ -106,8 +111,7 @@ def index():
     plt.close()  # Close the figure to free memory
 
     convergence_path = os.path.join('static', 'temp.png')
-    
-    return render_template('index.html', plot_url=plot_path, convergence_url=convergence_path)
+    return render_template('index.html', plot_url=plot_path, convergence_url=convergence_path, max_steps=length_images)
 
 
 @app.route('/plot', methods=["POST"])
