@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>KMeans Clustering Visualization</title>
+    <link rel="stylesheet" href="./../static/styles.css" />
+  </head>
+  <body>
+    <h1 class="title">KMeans Clustering Algorithm</h1>
+
+    <form id="uploadForm" action="/" method="POST">
+      <div class="label">
+        <label for="k_clusters">Number of Clusters(k):</label> <br />
+        <input
+          class="input"
+          type="number"
+          id="k_clusters"
+          name="k_clusters"
+          min="1"
+          required
+        /><br />
+        <label for="initialization_method">Initialization Method:</label> <br />
+        <select
+          class="input"
+          name="initialization_method"
+          id="initialization_method"
+        >
+          <option value="random">Random</option>
+          <option value="farthest_first">Farthest First</option>
+          <option value="kmeans">Kmeans++</option>
+          <option value="manual">Manual</option>
+        </select>
+        <br />
+      </div>
+    </form>
+    <div class="buttons">
+      <button class="button">Step through KMeans</button>
+      <button class="convergence button">Run to Convergence</button>
+      <button class="generate button">Generate New Dataset</button>
+      <button class="reset button">Reset Algorithm</button>
+    </div>
+
+    <div class="plot">
+      <img id="plot-image" src="{{ plot_url }}" alt="Plot Image" />
+    </div>
+
+    <script>
+      console.log("run")
+      let convergence = document.querySelector(".convergence");
+      let reset = document.querySelector(".reset");
+      let image = document.querySelector("#plot-image");
+      if (convergence) {
+        convergence.addEventListener("click", () => {
+          console.log(image.src);
+          // Toggle plot image source
+          image.src =
+            "{{ url_for('static', filename='temp.png') }}?v=" +
+            new Date().getTime();
+          console.log(image.src);
+        });
+      }
+      if (reset) {
+        reset.addEventListener("click", () => {
+          image.src = "{{ url_for('static', filename='plot.png') }}";
+          +new Date().getTime();
+        });
+      }
+    </script>
+
+    <script src="../static/script.js"></script>
+  </body>
+</html>
